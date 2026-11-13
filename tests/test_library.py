@@ -2,9 +2,11 @@
 import unittest
 from src.models import Book
 from src.library import Library
+from src.errors import InvalidPagesError
 
 
 class TestBook(unittest.TestCase):
+
     def test_valid_book(self):
         book = Book(
             1, "Python Basics", "John", "Programming", 100
@@ -83,6 +85,7 @@ class TestBook(unittest.TestCase):
                 100, rating="excellent"
             )
 
+
 class TestReadingGoal(unittest.TestCase):
 
     def setUp(self):
@@ -90,7 +93,6 @@ class TestReadingGoal(unittest.TestCase):
 
     def test_valid_reading_goal(self):
         self.library.set_reading_goal(12)
-
         self.assertEqual(self.library.reading_goal, 12)
 
     def test_zero_reading_goal(self):
@@ -100,6 +102,41 @@ class TestReadingGoal(unittest.TestCase):
     def test_negative_reading_goal(self):
         with self.assertRaises(ValueError):
             self.library.set_reading_goal(-5)
+
+
+class TestUpdateProgress(unittest.TestCase):
+
+    def setUp(self):
+        self.library = Library()
+        self.book = Book(
+            1, "Python Basics", "John", "Programming", 100
+        )
+        self.library.add_book(self.book)
+
+    def test_update_current_page(self):
+        self.library.update_progress(1, 25)
+        self.assertEqual(self.book.current_page, 25)
+
+    def test_status_changes_to_reading(self):
+        self.library.update_progress(1, 25)
+        self.assertEqual(self.book.status, "reading")
+
+    def test_status_changes_to_finished(self):
+        self.library.update_progress(1, 100)
+        self.assertEqual(self.book.status, "finished")
+
+    def test_finish_date_is_set(self):
+        self.library.update_progress(1, 100)
+        self.assertIsNotNone(self.book.finish_date)
+
+    def test_negative_page_raises_error(self):
+        with self.assertRaises(InvalidPagesError):
+            self.library.update_progress(1, -5)
+
+    def test_page_exceeds_total_raises_error(self):
+        with self.assertRaises(InvalidPagesError):
+            self.library.update_progress(1, 101)
+
 
 if __name__ == "__main__":
     unittest.main()

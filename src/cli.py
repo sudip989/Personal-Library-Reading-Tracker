@@ -25,23 +25,25 @@ class LibraryCLI:
         print("\n===================================================")
 
         menu = [
-            "Add Book",
-            "View All Books",
-            "Search Books",
-            "Filter Books",
-            "Update Reading Progress",
-            "Mark Book as Finished",
-            "Remove Book",
-            "Statistics",
-            "Export Books to CSV",
-            "Set Reading Goal",
-            "Show Reading Goal",
-            "Update Book Notes",
-            "Exit"
+            "Exit                               ||",
+            "Add Book                           ||",
+            "View All Books                     ||",
+            "Search Books                       ||",
+            "Filter Books                       ||",
+            "Update Reading Progress            ||",
+            "Mark Book as Finished              ||",
+            "Remove Book                        ||",
+            "Statistics                         ||",
+            "Export Books to CSV                ||",
+            "Set Reading Goal                  ||",
+            "Show Reading Goal                 ||",
+            "Update Book Notes                 ||"
         ]
 
-        for number, item in enumerate(menu, start=1):
-            print(f"{number}. {item}")
+        for number, item in enumerate(menu, start=0):
+            print(f"||         {number}. {item}")
+
+        print("===================================================")
 
     def run(self) -> None:
         """Run the main menu loop."""
@@ -49,7 +51,7 @@ class LibraryCLI:
             self.show_menu()
             choice = input("Enter your choice: ").strip()
 
-            if choice == "13":
+            if choice == "0":
                 print("Thank you for using Library Tracker!")
                 break
 
@@ -83,11 +85,11 @@ class LibraryCLI:
                 case "10":
                     self.set_reading_goal()
 
-                case "12":
-                    self.update_book_notes()
-
                 case "11":
                     self.show_reading_goal()
+
+                case "12":
+                    self.update_book_notes()
 
                 case _:
                     print("Invalid input. Please try again.")
@@ -106,13 +108,6 @@ class LibraryCLI:
             if total_pages <= 0:
                 print("Total pages must be greater than zero.")
                 return
-
-            print("\nAvailable statuses:")
-            print("1. to-read")
-            print("2. reading")
-            print("3. finished")
-
-            status_choice = input("Choose status (1-3): ").strip()
             
             while True:
                 print("\nAvailable statuses:")

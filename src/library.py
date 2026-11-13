@@ -93,9 +93,13 @@ class Library:
             raise InvalidPagesError(f"Invalid page number: {current_page}")
         book.current_page = current_page
 
-        if current_page > 0 and book.status == "to-read" :
-            book.status = "reading"            
+        if current_page == book.total_pages:
+            book.status = "finished"
+            book.finish_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        elif current_page > 0 and book.status == "to-read":
+            book.status = "reading"
 
+            
     def finish_book(self, book_id: int) -> None:
         """Mark a book as finished."""
 
